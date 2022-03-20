@@ -1,7 +1,6 @@
 package com.example.userprofile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,10 +23,12 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.buttonNext.setOnClickListener { _ ->
-            binding.textView.text = "clikced"
-            Log.i("Button", "Button Clicked")
-        }
+        binding.buttonNext.setOnClickListener { loadData() }
+    }
+
+    private fun loadData() {
+        val id = binding.textInputID.text
+        println(id)
     }
 
 }

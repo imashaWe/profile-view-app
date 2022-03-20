@@ -48,7 +48,7 @@ class MainFragment : Fragment() {
         var user = userAPIService.getUser(id.toString())
 
         setLoading(true)
-        binding.layoutDetails.visibility = View.GONE
+        binding.layoutDetails.visibility = View.INVISIBLE
 
         user.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
@@ -58,10 +58,10 @@ class MainFragment : Fragment() {
                 setLoading(false)
 
                 body?.let {
-                    binding.textViewUserName.text = body.name
-                    binding.textViewEmail.text = body.email
-                    binding.textViewPhone.text = body.phone
-                    binding.textViewWeb.text = body.website
+                    binding.textViewUserName.text = it.name
+                    binding.textViewEmail.text = it.email
+                    binding.textViewPhone.text = it.phone
+                    binding.textViewWeb.text = it.website
 
                     binding.layoutDetails.visibility = View.VISIBLE
                 }
@@ -80,7 +80,7 @@ class MainFragment : Fragment() {
 
     private fun setLoading(isLoading: Boolean) {
         binding.buttonNext.isActivated = isLoading
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 
     private fun showMessage(message: String) {

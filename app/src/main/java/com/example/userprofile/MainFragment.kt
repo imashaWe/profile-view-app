@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.userprofile.databinding.FragmentMainBinding
 import com.example.userprofile.models.User
@@ -38,27 +39,52 @@ class MainFragment : Fragment() {
 
     private fun loadData() {
         val id = binding.textInputID.text
+
+        if (id?.isEmpty() == true) {
+            showMessage("Please type the User ID!")
+            return
+        }
+
         var user = userAPIService.getUser(id.toString())
+
+        setLoading(true)
+        binding.layoutDetails.visibility = View.GONE
 
         user.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
 
                 val body = response.body()
+
+                setLoading(false)
+
                 body?.let {
                     binding.textViewUserName.text = body.name
                     binding.textViewEmail.text = body.email
                     binding.textViewPhone.text = body.phone
                     binding.textViewWeb.text = body.website
+
+                    binding.layoutDetails.visibility = View.VISIBLE
                 }
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
                 Log.e(tag, "error:" + t.message)
+                showMessage(t.message!!)
             }
+
 
         })
 
-        println(id)
+
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.buttonNext.isActivated = isLoading
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun showMessage(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
 }
